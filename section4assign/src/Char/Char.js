@@ -1,15 +1,17 @@
 import React from 'react';
 
-const Char = (letter) => {
+const char = (props) => {
     const style = {
-      display: 'inline-block',
-      padding: '15px',
-      textAlign: 'center',
-      border: '1px solid black'
+        display: 'inline-block',
+        padding: '16px',
+        margin: '16px',
+        textAlign: 'center',
+        border: '1px solid black'
     };
+
     return (
-        <div style={style}>{letter}</div>
-    );
+        <div style={style} onClick={props.delete}>{props.character}</div>
+    )
 };
 
-export default Char;
+export default char;

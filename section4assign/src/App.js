@@ -1,37 +1,37 @@
 import React, { Component } from 'react';
 import './App.css';
-import Validation from "./Validation/Validation";
-import Char from "./Char/Char";
+
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 class App extends Component {
     state = {
-        typedString: '',
-        charlen: 0,
-        message: 'Text too short'
+        userInput: ''
     };
 
-    inputChangeHandler = (event) => {
-        const inputStr = event.target.value;
-        let charlen = inputStr.length;
-        this.setState({typedString: inputStr});
-        this.setState({charlen: charlen});
+    inputChangedHandler = (event) => {
+        this.setState({userInput: event.target.value})
+    };
+
+    deleteCharacterHandler = (charIndex) => {
+        const charStr = this.state.userInput.split('');
+        charStr.splice(charIndex, 1);
         this.setState({
-            message: Validation(charlen)
+            'userInput': charStr.join('')
         });
     };
 
     render() {
-        const strArr = this.state.typedString.split('');
-        const elements = strArr.map((char, index) => {
-           return (
-               Char(char)
-           )
+        const charList = this.state.userInput.split('').map((ch, index) => {
+           return (<Char key={index} character={ch} delete={() => this.deleteCharacterHandler(index)}/>)
         });
+
         return (
             <div className="App">
-                <input type="text" onChange={this.inputChangeHandler} />
-                <p>Text length: {this.state.charlen} | {this.state.message}</p>
-                {elements}
+                <input type="text" onChange={this.inputChangedHandler} value={this.state.userInput}/>
+                <p>Text Length: {this.state.userInput.length}</p>
+                <Validation inputLength={this.state.userInput.length} />
+                {charList}
             </div>
         );
     }
