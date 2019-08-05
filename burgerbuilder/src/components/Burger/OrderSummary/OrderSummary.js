@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 
 const orderSummary = (props) => {
@@ -11,6 +11,7 @@ const orderSummary = (props) => {
                     <span style={{textTransform: 'capitalize'}}>{igKey}</span>: {props.ingredients[igKey]}
                 </li>);
         });
+
     return (
         <Aux>
             <h3>Order Summary</h3>
@@ -23,7 +24,7 @@ const orderSummary = (props) => {
             <Button btnType={'Danger'} clicked={props.modalClose}>CANCEL</Button>
             <Button btnType={'Success'} clicked={props.orderContinue}>CONTINUE</Button>
         </Aux>
-    )
+    );
 };
 
 export default orderSummary;
