@@ -26,6 +26,7 @@ class Posts extends Component {
     // named "response"
     // This response JSON object must then be passed into a function as a parameter so you can do what you need to with it
     componentDidMount() {
+        console.log(this.props);
         axios.get('/posts')
             .then(response => {
                 const posts = response.data.slice(0, 4);
