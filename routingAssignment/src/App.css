@@ -1,0 +1,24 @@
+.App header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.App header li {
+    display: inline-block;
+    margin: 20px;
+}
+
+.App header a {
+    text-decoration: none;
+    color: black
+}
+
+
+.App header a:hover,
+.App header a:active,
+.App header a.active {
+    color: #fa923f;
+}
