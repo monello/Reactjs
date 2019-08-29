@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {BrowserRouter} from 'react-router-dom';
-import {Route, Link} from 'react-router-dom';
+import {BrowserRouter, Route, NavLink, Redirect, Switch} from 'react-router-dom';
 
 import Courses from './containers/Courses/Courses';
 import Users from './containers/Users/Users';
+import notFound from "./component/NotFound/NotFound";
 
 import './App.css';
 
@@ -36,15 +36,19 @@ class App extends Component {
                     <header>
                         <nav>
                             <ul>
-                                <li><Link to="/">Instructions</Link></li>
-                                <li><Link to="/courses">Courses</Link></li>
-                                <li><Link to="/users">Users</Link></li>
+                                <li><NavLink to="/" exact>Instructions</NavLink></li>
+                                <li><NavLink to="/courses">Courses</NavLink></li>
+                                <li><NavLink to="/users">Users</NavLink></li>
                             </ul>
                         </nav>
                     </header>
-                    <Route path="/" exact render={() => instructions}/>
-                    <Route path="/courses" component={Courses}/>
-                    <Route path="/users" exact component={Users}/>
+                    <Switch>
+                        <Route path="/" exact render={() => instructions} />
+                        <Route path="/courses" component={Courses} />
+                        <Route path="/users" component={Users} />
+                        <Redirect from="/all-courses" to="/courses" />
+                        <Route component={notFound} />
+                    </Switch>
                 </div>
             </BrowserRouter>
         );

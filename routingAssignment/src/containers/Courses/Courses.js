@@ -15,7 +15,15 @@ class Courses extends Component {
 
     render () {
         let courses = this.state.courses.map( course => {
-            return <Link to={'/courses/' + course.id}  key={course.id}><article className="Course">{course.title}</article></Link>;
+            return (
+                <Link key={course.id}
+                      to={{
+                        pathname: this.props.match.url + '/' + course.id,
+                        search: 'title=' + course.title
+                    }}>
+                    <article className="Course">{course.title}</article>
+                </Link>
+            );
         });
         return (
             <div>
@@ -23,7 +31,7 @@ class Courses extends Component {
                 <section className="Courses">
                     {courses}
                 </section>
-                <Route path="/courses/:id" exact component={Course} />
+                <Route path={this.props.match.url + '/:id'} exact component={Course} />
             </div>
         );
     }
