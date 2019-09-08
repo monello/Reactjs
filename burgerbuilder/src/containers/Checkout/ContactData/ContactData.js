@@ -6,6 +6,7 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.module.css';
 import Input from '../../../components/UI/Input/Input';
+import logo from "../../../components/Logo/Logo";
 
 class ContactData extends Component {
     state = {
@@ -20,7 +21,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'text',
@@ -32,7 +34,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             postalCode: {
                 elementType: 'text',
@@ -46,7 +49,8 @@ class ContactData extends Component {
                     minLength: 5,
                     maxLength: 5
                 },
-                valid: false
+                valid: false,
+                touched: false
 
             },
             country: {
@@ -59,7 +63,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'text',
@@ -71,7 +76,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -80,9 +86,13 @@ class ContactData extends Component {
                         {value: 'fastest', displayValue: 'Fastest'},
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
-                }
+                },
+                value: '',
+                validation: {},
+                valid: true
             }
         },
+        formIsValid: false,
         loading: false
     };
 
@@ -111,6 +121,7 @@ class ContactData extends Component {
 
     checkValidity = (value, rules) => {
         let isValid = true;
+        if (!rules) return true;
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
@@ -131,10 +142,17 @@ class ContactData extends Component {
             ...updatedOrderFom[inputIdentifier]
         };
         updatedElement.value = event.target.value;
-        updatedOrderFom.valid = this.checkValidity(event.target.value, updatedElement.validation);
+        updatedElement.valid = this.checkValidity(event.target.value, updatedElement.validation);
+        updatedElement.touched = true;
         updatedOrderFom[inputIdentifier] = updatedElement;
-        console.log(updatedOrderFom);
-        this.setState({orderForm: updatedOrderFom});
+        let formIsValid = true;
+        for (let inputIdentifier in updatedOrderFom) {
+            formIsValid = updatedOrderFom[inputIdentifier].valid && formIsValid;
+        }
+        this.setState({
+            orderForm: updatedOrderFom,
+            formIsValid: formIsValid
+        });
     }
 
     render() {
@@ -152,9 +170,12 @@ class ContactData extends Component {
                     elementType={formElement.config.elementType}
                     elementConfig={formElement.config.elementConfig}
                     value={formElement.config.value}
+                    invalid={!formElement.config.valid}
+                    shouldValidate={formElement.config.validation}
+                    touched={formElement.config.touched}
                     changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
             ))}
-            <Button btnType="Success">ORDER</Button>
+            <Button disabled={!this.state.formIsValid} btnType="Success">ORDER</Button>
         </form>);
         if (this.state.loading) {
             form = <Spinner/>
