@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, combineReducers} from "redux";
+import {createStore, combineReducers, applyMiddleware, compose} from "redux";
 import {Provider} from "react-redux";
+import thunk from 'redux-thunk';
 
 import './index.css';
 import App from './App';
@@ -21,8 +22,24 @@ const rootReducer = combineReducers({
     res: resultsReducer
 });
 
+const logger = store => {
+    return next => {
+        return action => {
+            console.log('[Middleware] Dispatching', action);
+            const result = next(action);
+            console.log('[Middleware] next state', store.getState());
+            return result;
+        }
+    }
+};
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 // create the central store and connect the reducer to the store
-const store = createStore(rootReducer);
+const store = createStore(
+    rootReducer,
+    composeEnhancers(applyMiddleware(logger, thunk))
+);
 
 // use the Provider component to inject Redux into our React app
 // send the store in to the Provider module as a parameter

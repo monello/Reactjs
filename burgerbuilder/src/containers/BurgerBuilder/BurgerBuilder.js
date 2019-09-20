@@ -11,10 +11,12 @@ import Burger from '../../components/Burger/Burger'
 import BurgerControls from '../../components/Burger/BuildControls/BuildControls'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
+// UTILS
+import * as actionTypes from '../../store/actions';
+
 // UI
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Modal from '../../components/UI/Modal/Modal';
-import * as actionTypes from '../../store/actions';
 
 class BurgerBuilder extends Component {
     state = {
