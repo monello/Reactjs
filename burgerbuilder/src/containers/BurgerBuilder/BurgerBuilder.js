@@ -7,7 +7,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 // Component
 import Burger from '../../components/Burger/Burger'
-import BurgerControls from '../../components/Burger/BuildControls/BuildControls'
+import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 // UTILS
@@ -35,7 +35,12 @@ class BurgerBuilder extends Component {
     };
 
     purchaseHandler = () => {
-        this.setState({purchasing: true});
+        if (this.props.isAuthenticated) {
+            this.setState({purchasing: true});
+        } else {
+            this.props.onSetAuthRedirectPath('/checkout');
+            this.props.history.push('/auth');
+        }
     };
 
     purchaseCancelHandler = () => {
@@ -60,13 +65,15 @@ class BurgerBuilder extends Component {
             burger = (
                 <Aux>
                     <Burger ingredients={this.props.ingredients}/>
-                    <BurgerControls
+                    <BuildControls
                         ingredientAdded={this.props.onAddIngredient}
                         ingredientRemoved={this.props.onRemoveIngredient}
                         disabled={disabledInfo}
                         purchasable={this.updatePurchaseState()}
                         purchasing={this.purchaseHandler}
-                        totalPrice={this.props.totalPrice}/>
+                        totalPrice={this.props.totalPrice}
+                        isAuthenticated={this.props.isAuthenticated}
+                    />
                 </Aux>
             );
             orderSummary = <OrderSummary
@@ -91,7 +98,8 @@ const mapStateToProps = state => {
     return {
         ingredients: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
-        error: state.burgerBuilder.error
+        error: state.burgerBuilder.error,
+        isAuthenticated: state.auth.token !== null
     }
 };
 
@@ -100,7 +108,8 @@ const mapDispatchToProps = dispatch => {
         onAddIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
         onRemoveIngredient: (ingredient) => dispatch(actions.removeIngredient(ingredient)),
         onInitIngredients: () => dispatch(actions.initIngredients()),
-        onInitPurchase: () => dispatch(actions.purchaseInit())
+        onInitPurchase: () => dispatch(actions.purchaseInit()),
+        onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
     }
 };
 
