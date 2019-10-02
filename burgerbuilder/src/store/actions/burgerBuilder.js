@@ -36,7 +36,6 @@ export const initIngredients = () => {
     return dispatch => {
         axios.get('https://my-react-course-project-15ec1.firebaseio.com/ingredients.json')
             .then( response => {
-                console.log("Response:", response);
                 dispatch(setIngredients(response.data));
             })
             .catch( error => {
